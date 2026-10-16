@@ -1,0 +1,5 @@
+battery_id,capacity_rows,capacity_duplicate_rows,capacity_bad_rows,first_capacity_cycle,last_capacity_cycle,min_capacity_ah,max_capacity_ah,eol_cycle_at_1_4ah,cycle_rows,cycle_duplicate_rows,cycle_bad_rows,charge_rows,discharge_rows,impedance_rows,other_type_rows,cycle_min,cycle_max,non_monotonic_time_rows,missing_required_columns
+B0005,168,0,0,2,614,1.2874525221379407,1.8564874208181574,449,591458,0,0,541173,50285,0,0,1,616,0,
+B0006,168,0,0,2,614,1.15381833159625,2.035337591005598,387,591458,0,0,541173,50285,0,0,1,616,0,
+B0007,168,0,0,2,614,1.4004552399066514,1.89105229539079,,591458,0,0,541173,50285,0,0,1,616,0,
+B0018,132,0,0,3,319,1.341051440640485,1.8550045207910817,237,314676,0,0,279810,34866,0,0,1,319,0,

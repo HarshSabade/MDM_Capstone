@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650">
+<rect width="100%" height="100%" fill="white"/>
+<text x="550" y="30" text-anchor="middle" font-size="20">Rmse baseline comparison</text>
+<line x1="85" y1="525" x2="1065" y2="525" stroke="black"/><line x1="85" y1="60" x2="85" y2="525" stroke="black"/>
+<text x="550" y="640" text-anchor="middle">Observed trajectory fraction</text>
+<text transform="translate(18 360) rotate(-90)" text-anchor="middle">RMSE (cycles)</text>
+<line x1="85.00" y1="60" x2="85.00" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="525.00" x2="1065" y2="525.00" stroke="#e0e0e0"/>
+<text x="85.00" y="547" text-anchor="middle" font-size="12">0.20</text>
+<text x="75" y="529.00" text-anchor="end" font-size="12">0.00</text>
+<line x1="248.33" y1="60" x2="248.33" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="447.50" x2="1065" y2="447.50" stroke="#e0e0e0"/>
+<text x="248.33" y="547" text-anchor="middle" font-size="12">0.30</text>
+<text x="75" y="451.50" text-anchor="end" font-size="12">123.59</text>
+<line x1="411.67" y1="60" x2="411.67" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="370.00" x2="1065" y2="370.00" stroke="#e0e0e0"/>
+<text x="411.67" y="547" text-anchor="middle" font-size="12">0.40</text>
+<text x="75" y="374.00" text-anchor="end" font-size="12">247.18</text>
+<line x1="575.00" y1="60" x2="575.00" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="292.50" x2="1065" y2="292.50" stroke="#e0e0e0"/>
+<text x="575.00" y="547" text-anchor="middle" font-size="12">0.50</text>
+<text x="75" y="296.50" text-anchor="end" font-size="12">370.77</text>
+<line x1="738.33" y1="60" x2="738.33" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="215.00" x2="1065" y2="215.00" stroke="#e0e0e0"/>
+<text x="738.33" y="547" text-anchor="middle" font-size="12">0.60</text>
+<text x="75" y="219.00" text-anchor="end" font-size="12">494.36</text>
+<line x1="901.67" y1="60" x2="901.67" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="137.50" x2="1065" y2="137.50" stroke="#e0e0e0"/>
+<text x="901.67" y="547" text-anchor="middle" font-size="12">0.70</text>
+<text x="75" y="141.50" text-anchor="end" font-size="12">617.95</text>
+<line x1="1065.00" y1="60" x2="1065.00" y2="525" stroke="#e0e0e0"/>
+<line x1="85" y1="60.00" x2="1065" y2="60.00" stroke="#e0e0e0"/>
+<text x="1065.00" y="547" text-anchor="middle" font-size="12">0.80</text>
+<text x="75" y="64.00" text-anchor="end" font-size="12">741.54</text>
+<rect x="170.74999999999991" y="120.65217391304344" width="73.5" height="404.34782608695656" fill="#1565c0"/>
+<rect x="252.41666666666663" y="447.67496432130406" width="73.5" height="77.32503567869594" fill="#ef6c00"/>
+<rect x="497.4166666666665" y="195.37042100577435" width="73.5" height="329.62957899422565" fill="#1565c0"/>
+<rect x="579.0833333333333" y="441.91828684257956" width="73.5" height="83.08171315742044" fill="#ef6c00"/>
+<rect x="824.0833333333331" y="484.15037934418064" width="73.5" height="40.849620655819365" fill="#1565c0"/>
+<rect x="905.7499999999997" y="462.1789870800406" width="73.5" height="62.8210129199594" fill="#ef6c00"/>
+<text x="900" y="85" fill="#1565c0" font-size="14">Linear</text>
+<text x="900" y="109" fill="#ef6c00" font-size="14">Similarity</text>
+</svg>

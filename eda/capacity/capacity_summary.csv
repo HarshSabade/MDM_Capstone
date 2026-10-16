@@ -1,0 +1,5 @@
+battery_id,capacity_rows,first_cycle,last_cycle,min_capacity_ah,max_capacity_ah,first_soh,last_soh,eol_cycle,eol_observed,capacity_increases,missing_cycle_gaps
+B0005,168,2,614,1.287453,1.856487,0.928244,0.662540,449,true,36,167
+B0006,168,2,614,1.153818,2.035338,1.017669,0.592838,387,true,27,167
+B0007,168,2,614,1.400455,1.891052,0.945526,0.716228,,false,47,167
+B0018,132,3,319,1.341051,1.855005,0.927502,0.670526,237,true,21,131

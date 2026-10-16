@@ -1,0 +1,5 @@
+battery_id,capacity_rows,capacity_cycles_with_cycle_data,capacity_cycles_with_discharge_data,capacity_cycles_without_discharge_data
+B0005,168,168,168,0
+B0006,168,168,168,0
+B0007,168,168,168,0
+B0018,132,132,132,0

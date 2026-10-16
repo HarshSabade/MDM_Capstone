@@ -1,0 +1,21 @@
+# Raw and external datasets
+NASA dataset/
+*.mat
+*.zip
+
+# External papers and local research documents
+*.pdf
+*.docx
+
+# Local tool installations and build output
+tools/
+**/target/
+*.class
+classpath.txt
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
