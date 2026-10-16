@@ -98,8 +98,25 @@ The baseline outputs include:
 - Absolute RUL error plot
 - MAE, RMSE, and MAPE comparison plots
 
-The current modeling stage is a baseline implementation. The paper-faithful
-RSSA/CWS-RSSA implementation is not yet included.
+The current modeling stage includes:
+
+- A linear degradation baseline
+- A leave-one-battery-out expanding-window evaluation
+- An RMSE-plus-offset similarity predictor
+
+For each test battery, the observed prefixes are 20%, 30%, 40%, 50%, 60%,
+70%, and 80% of its observed pre-EOL trajectory. The test battery is excluded
+from the reference database. Each reference prefix is shifted by:
+
+```text
+offset = target_latest_capacity - reference_latest_capacity
+```
+
+The reference with the lowest RMSE between the target prefix and shifted
+reference prefix is selected. Its post-prefix trajectory is mapped to the test
+battery to estimate the EOL cycle and RUL.
+
+The paper-faithful RSSA/CWS-RSSA implementation is not yet included.
 
 ## EOL convention
 

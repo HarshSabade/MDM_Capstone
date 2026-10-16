@@ -11,33 +11,41 @@
 <line x1="248.33" y1="60" x2="248.33" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="447.50" x2="1065" y2="447.50" stroke="#e0e0e0"/>
 <text x="248.33" y="547" text-anchor="middle" font-size="12">0.30</text>
-<text x="75" y="451.50" text-anchor="end" font-size="12">123.59</text>
+<text x="75" y="451.50" text-anchor="end" font-size="12">207.34</text>
 <line x1="411.67" y1="60" x2="411.67" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="370.00" x2="1065" y2="370.00" stroke="#e0e0e0"/>
 <text x="411.67" y="547" text-anchor="middle" font-size="12">0.40</text>
-<text x="75" y="374.00" text-anchor="end" font-size="12">247.18</text>
+<text x="75" y="374.00" text-anchor="end" font-size="12">414.67</text>
 <line x1="575.00" y1="60" x2="575.00" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="292.50" x2="1065" y2="292.50" stroke="#e0e0e0"/>
 <text x="575.00" y="547" text-anchor="middle" font-size="12">0.50</text>
-<text x="75" y="296.50" text-anchor="end" font-size="12">370.77</text>
+<text x="75" y="296.50" text-anchor="end" font-size="12">622.01</text>
 <line x1="738.33" y1="60" x2="738.33" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="215.00" x2="1065" y2="215.00" stroke="#e0e0e0"/>
 <text x="738.33" y="547" text-anchor="middle" font-size="12">0.60</text>
-<text x="75" y="219.00" text-anchor="end" font-size="12">494.36</text>
+<text x="75" y="219.00" text-anchor="end" font-size="12">829.35</text>
 <line x1="901.67" y1="60" x2="901.67" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="137.50" x2="1065" y2="137.50" stroke="#e0e0e0"/>
 <text x="901.67" y="547" text-anchor="middle" font-size="12">0.70</text>
-<text x="75" y="141.50" text-anchor="end" font-size="12">617.95</text>
+<text x="75" y="141.50" text-anchor="end" font-size="12">1036.68</text>
 <line x1="1065.00" y1="60" x2="1065.00" y2="525" stroke="#e0e0e0"/>
 <line x1="85" y1="60.00" x2="1065" y2="60.00" stroke="#e0e0e0"/>
 <text x="1065.00" y="547" text-anchor="middle" font-size="12">0.80</text>
-<text x="75" y="64.00" text-anchor="end" font-size="12">741.54</text>
-<rect x="170.74999999999991" y="120.65217391304344" width="73.5" height="404.34782608695656" fill="#1565c0"/>
-<rect x="252.41666666666663" y="447.67496432130406" width="73.5" height="77.32503567869594" fill="#ef6c00"/>
-<rect x="497.4166666666665" y="195.37042100577435" width="73.5" height="329.62957899422565" fill="#1565c0"/>
-<rect x="579.0833333333333" y="441.91828684257956" width="73.5" height="83.08171315742044" fill="#ef6c00"/>
-<rect x="824.0833333333331" y="484.15037934418064" width="73.5" height="40.849620655819365" fill="#1565c0"/>
-<rect x="905.7499999999997" y="462.1789870800406" width="73.5" height="62.8210129199594" fill="#ef6c00"/>
+<text x="75" y="64.00" text-anchor="end" font-size="12">1244.02</text>
+<rect x="7.416666666666686" y="431.9909862323834" width="73.5" height="93.00901376761658" fill="#1565c0"/>
+<rect x="89.08333333333331" y="476.2500883346114" width="73.5" height="48.749911665388595" fill="#ef6c00"/>
+<rect x="170.74999999999991" y="283.9741361947241" width="73.5" height="241.0258638052759" fill="#1565c0"/>
+<rect x="252.41666666666663" y="491.1630213086952" width="73.5" height="33.83697869130481" fill="#ef6c00"/>
+<rect x="334.0833333333333" y="498.6158977419929" width="73.5" height="26.38410225800709" fill="#1565c0"/>
+<rect x="415.75" y="477.64722771523304" width="73.5" height="47.35277228476696" fill="#ef6c00"/>
+<rect x="497.4166666666665" y="328.5125976026224" width="73.5" height="196.4874023973776" fill="#1565c0"/>
+<rect x="579.0833333333333" y="482.42474093132995" width="73.5" height="42.57525906867005" fill="#ef6c00"/>
+<rect x="660.7499999999998" y="120.65217391304344" width="73.5" height="404.34782608695656" fill="#1565c0"/>
+<rect x="742.4166666666665" y="485.52857191731425" width="73.5" height="39.47142808268575" fill="#ef6c00"/>
+<rect x="824.0833333333331" y="500.65013468733395" width="73.5" height="24.349865312666054" fill="#1565c0"/>
+<rect x="905.7499999999997" y="493.1979423334576" width="73.5" height="31.802057666542396" fill="#ef6c00"/>
+<rect x="987.4166666666665" y="513.0816750018264" width="73.5" height="11.918324998173603" fill="#1565c0"/>
+<rect x="1069.083333333333" y="508.78429850248085" width="73.5" height="16.21570149751915" fill="#ef6c00"/>
 <text x="900" y="85" fill="#1565c0" font-size="14">Linear</text>
 <text x="900" y="109" fill="#ef6c00" font-size="14">Similarity</text>
 </svg>
