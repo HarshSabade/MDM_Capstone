@@ -12,8 +12,8 @@ pipeline.
 
 - `eda/` - Java data validation, capacity/RUL table generation, signal summaries,
   and SVG EDA plots
-- `model/` - Maven Java project containing leakage-safe linear and similarity
-  RUL baselines and SVG plot generation
+- `model/` - Maven Java project containing leakage-safe linear, similarity,
+  double-exponential, and SSA-style recurrent RUL baselines plus SVG plot generation
 - `model-output/` - generated baseline predictions, metrics, and plots
 - `.github/` - existing project workflow metadata
 
@@ -87,6 +87,10 @@ java -cp $cp mdm.capstone.BaselinePlotGenerator `
   "..\model-output\rul_metrics.csv" `
   "..\model-output\plots"
 
+java -cp $cp mdm.capstone.RulReportGenerator `
+  "..\model-output" `
+  "..\model-output\rul_report.html"
+
 Remove-Item ".\classpath.txt"
 ```
 
@@ -97,12 +101,18 @@ The baseline outputs include:
 - Actual-versus-predicted RUL plot
 - Absolute RUL error plot
 - MAE, RMSE, and MAPE comparison plots
+- MAE, RMSE, and MAPE comparisons include both logistic fusion variants
+- Bootstrap RUL interval plot
+- Standalone HTML report with prediction, uncertainty, metric, and footprint tables
 
 The current modeling stage includes:
 
 - A linear degradation baseline
 - A leave-one-battery-out expanding-window evaluation
 - An RMSE-plus-offset similarity predictor
+- A bounded double-exponential trend predictor using Apache Commons Math
+- A recurrent SSA-style capacity forecasting baseline using singular-value reconstruction
+- Stage-based logistic fusion of similarity with the double-exponential and SSA predictors
 
 For each test battery, the observed prefixes are 20%, 30%, 40%, 50%, 60%,
 70%, and 80% of its observed pre-EOL trajectory. The test battery is excluded
@@ -116,7 +126,37 @@ The reference with the lowest RMSE between the target prefix and shifted
 reference prefix is selected. Its post-prefix trajectory is mapped to the test
 battery to estimate the EOL cycle and RUL.
 
-The paper-faithful RSSA/CWS-RSSA implementation is not yet included.
+The prediction output contains one row per battery, observation fraction, and
+predictor. Double-exponential and SSA rows include fit diagnostics such as
+parameters, fit RMSE, and explicit status flags. Metrics report both total
+cases and successful cases; failed or non-crossing fits are not silently scored
+as valid forecasts.
+
+The fusion predictors use the chronological observed fraction as their stage
+variable. Their similarity weight is:
+
+```text
+w = 1 / (1 + exp(k * (observed_fraction - inflection)))
+```
+
+The default configuration is `k = 10` and `inflection = 0.5`. The fused RUL is
+rounded from `w * similarity_rul + (1 - w) * trend_rul`. A fusion row is only
+marked successful when both component predictors succeed.
+
+Every successful point prediction also receives a reproducible residual-bootstrap
+interval. The default is 200 refits at 95% confidence using seed `20261017`.
+Residuals are estimated from the fitted model when supported by the predictor
+(linear, double exponential, SSA, and fusion trend components); the linear
+prefix fit is the fallback. Resampled residuals are added to fitted synthetic
+prefixes and passed through the complete predictor again. Bootstrap failures
+are recorded explicitly and are excluded from interval coverage and width
+metrics. Prediction output includes lower, median, and upper RUL bounds;
+metrics include interval coverage and width.
+
+The evaluator also writes `predictor_profiles.csv`, containing elapsed time and
+heap measurements for each predictor case. `RulReportGenerator` creates a
+dependency-free HTML report that links the SVG plots and renders all generated
+CSV tables.
 
 ## EOL convention
 

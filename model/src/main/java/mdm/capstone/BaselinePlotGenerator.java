@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +27,8 @@ public final class BaselinePlotGenerator {
     private static final int RIGHT = 35;
     private static final int TOP = 60;
     private static final int BOTTOM = 125;
-    private static final String[] COLORS = {"#1565c0", "#ef6c00", "#2e7d32", "#8e24aa"};
+    private static final String[] COLORS = {"#1565c0", "#ef6c00", "#2e7d32", "#8e24aa",
+        "#c62828", "#00838f"};
 
     private BaselinePlotGenerator() {
     }
@@ -36,12 +39,14 @@ public final class BaselinePlotGenerator {
             System.exit(2);
         }
         List<Prediction> predictions = readPredictions(Paths.get(args[0]));
+        List<IntervalPrediction> intervals = readIntervals(Paths.get(args[0]));
         List<Metric> metrics = readMetrics(Paths.get(args[1]));
         Path output = Paths.get(args[2]);
         Files.createDirectories(output);
 
         writePredictionPlot(predictions, output.resolve("rul_actual_vs_predicted.svg"));
         writeErrorPlot(predictions, output.resolve("rul_absolute_error.svg"));
+        writeIntervalPlot(intervals, output.resolve("rul_prediction_intervals.svg"));
         writeMetricPlot(metrics, "mae", "MAE (cycles)",
                 output.resolve("baseline_mae_comparison.svg"));
         writeMetricPlot(metrics, "rmse", "RMSE (cycles)",
@@ -51,19 +56,78 @@ public final class BaselinePlotGenerator {
         System.out.println("Wrote plots to " + output.toAbsolutePath());
     }
 
-    private static List<Prediction> readPredictions(Path file) throws IOException {
-        List<Prediction> result = new ArrayList<>();
+    private static List<IntervalPrediction> readIntervals(Path file) throws IOException {
+        List<IntervalPrediction> result = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
             reader.readLine();
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] v = line.split(",", -1);
-                result.add(new Prediction(v[0], Double.parseDouble(v[1]),
-                        Integer.parseInt(v[2]), Integer.parseInt(v[3]),
-                        Integer.parseInt(v[4]), Integer.parseInt(v[5])));
+                if (v.length < 21 || !"ok".equals(v[7]) || !"ok".equals(v[20])) {
+                    continue;
+                }
+                result.add(new IntervalPrediction(v[0], Double.parseDouble(v[1]),
+                        Integer.parseInt(v[3]), v[4], Integer.parseInt(v[5]),
+                        Double.parseDouble(v[15]), Double.parseDouble(v[16]),
+                        Double.parseDouble(v[17])));
             }
         }
         return result;
+    }
+
+    private static void writeIntervalPlot(List<IntervalPrediction> values, Path output)
+            throws IOException {
+        double max = values.stream().mapToDouble(v -> Math.max(v.actualRul, v.upper))
+                .max().orElse(1.0);
+        writeChartStart(output, "Bootstrap RUL prediction intervals",
+                "Prediction case", "RUL (cycles)", 0, values.size(), 0, max * 1.1, false);
+        try (BufferedWriter writer = Files.newBufferedWriter(output, StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.APPEND)) {
+            for (int index = 0; index < values.size(); index++) {
+                IntervalPrediction value = values.get(index);
+                double center = LEFT + (index + 0.5) * (WIDTH - LEFT - RIGHT)
+                        / Math.max(1, values.size());
+                double lower = y(value.lower, 0, max * 1.1);
+                double upper = y(value.upper, 0, max * 1.1);
+                double median = y(value.median, 0, max * 1.1);
+                writer.write("<line x1=\"" + format(center) + "\" y1=\"" + format(lower)
+                        + "\" x2=\"" + format(center) + "\" y2=\"" + format(upper)
+                        + "\" stroke=\"#546e7a\" stroke-width=\"3\"/>");
+                writer.write("<circle cx=\"" + format(center) + "\" cy=\""
+                        + format(median) + "\" r=\"4\" fill=\"#c62828\"/>");
+                writer.write("<circle cx=\"" + format(center + 5) + "\" cy=\""
+                        + format(y(value.actualRul, 0, max * 1.1))
+                        + "\" r=\"4\" fill=\"#1565c0\"/>");
+            }
+            writer.write("<text x=\"900\" y=\"85\" fill=\"#c62828\" font-size=\"14\">Bootstrap median</text>\n");
+            writer.write("<text x=\"900\" y=\"109\" fill=\"#1565c0\" font-size=\"14\">Actual RUL</text>\n");
+            writer.write("<text x=\"900\" y=\"133\" fill=\"#546e7a\" font-size=\"14\">95% interval</text>\n");
+            writeChartEnd(writer);
+        }
+    }
+
+    private static List<Prediction> readPredictions(Path file) throws IOException {
+        Map<String, PredictionBuilder> grouped = new LinkedHashMap<>();
+        try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] v = line.split(",", -1);
+                String key = v[0] + "|" + v[1] + "|" + v[2];
+                PredictionBuilder builder = grouped.computeIfAbsent(key,
+                        ignored -> new PredictionBuilder(v[0], Double.parseDouble(v[1]),
+                                Integer.parseInt(v[2]), Integer.parseInt(v[3])));
+                int predicted = Integer.parseInt(v[5]);
+                if ("linear".equals(v[4])) {
+                    builder.linearRul = predicted;
+                } else if ("similarity".equals(v[4])) {
+                    builder.similarityRul = predicted;
+                }
+            }
+        }
+        return grouped.values().stream()
+                .filter(v -> v.linearRul != null && v.similarityRul != null)
+                .map(PredictionBuilder::build).toList();
     }
 
     private static List<Metric> readMetrics(Path file) throws IOException {
@@ -74,8 +138,8 @@ public final class BaselinePlotGenerator {
             while ((line = reader.readLine()) != null) {
                 String[] v = line.split(",", -1);
                 result.add(new Metric(Double.parseDouble(v[0]), v[1],
-                        Integer.parseInt(v[2]), Double.parseDouble(v[3]),
-                        Double.parseDouble(v[4]), Double.parseDouble(v[5])));
+                        Integer.parseInt(v[2]), Double.parseDouble(v[4]),
+                        Double.parseDouble(v[5]), Double.parseDouble(v[6])));
             }
         }
         return result;
@@ -174,19 +238,33 @@ public final class BaselinePlotGenerator {
                 "Observed trajectory fraction", yLabel, 0.2, 0.8, 0, max * 1.15, true);
         try (BufferedWriter writer = Files.newBufferedWriter(output, StandardCharsets.UTF_8,
                 java.nio.file.StandardOpenOption.APPEND)) {
-            int index = 0;
+            String[] methods = {"linear", "similarity", "double_exponential", "ssa",
+                "fused_double_exponential", "fused_ssa"};
             for (Metric value : values) {
-                double x = value.fraction + ("linear".equals(value.method) ? -0.025 : 0.025);
-                writer.write(barAt(x, metric(value, metric), 0.045, max * 1.15,
-                        "linear".equals(value.method) ? COLORS[0] : COLORS[1]));
-                index++;
+                int methodIndex = methodIndex(value.method, methods);
+                if (methodIndex < 0) {
+                    continue;
+                }
+                double x = value.fraction + (methodIndex - 2.5) * 0.012;
+                writer.write(barAt(x, metric(value, metric), 0.011, max * 1.15,
+                        COLORS[methodIndex]));
             }
-            writer.write("<text x=\"900\" y=\"85\" fill=\"" + COLORS[0]
-                    + "\" font-size=\"14\">Linear</text>\n");
-            writer.write("<text x=\"900\" y=\"109\" fill=\"" + COLORS[1]
-                    + "\" font-size=\"14\">Similarity</text>\n");
+            for (int index = 0; index < methods.length; index++) {
+                writer.write("<text x=\"900\" y=\"" + (85 + index * 22)
+                        + "\" fill=\"" + COLORS[index] + "\" font-size=\"14\">"
+                        + title(methods[index]) + "</text>\n");
+            }
             writeChartEnd(writer);
         }
+    }
+
+    private static int methodIndex(String method, String[] methods) {
+        for (int index = 0; index < methods.length; index++) {
+            if (methods[index].equals(method)) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     private static double metric(Metric value, String metric) {
@@ -298,7 +376,32 @@ public final class BaselinePlotGenerator {
             int linearRul, int similarityRul) {
     }
 
+    private static final class PredictionBuilder {
+        private final String batteryId;
+        private final double fraction;
+        private final int cycle;
+        private final int actualRul;
+        private Integer linearRul;
+        private Integer similarityRul;
+
+        private PredictionBuilder(String batteryId, double fraction, int cycle, int actualRul) {
+            this.batteryId = batteryId;
+            this.fraction = fraction;
+            this.cycle = cycle;
+            this.actualRul = actualRul;
+        }
+
+        private Prediction build() {
+            return new Prediction(batteryId, fraction, cycle, actualRul,
+                    linearRul, similarityRul);
+        }
+    }
+
     private record Metric(double fraction, String method, int cases, double mae,
             double rmse, double mape) {
+    }
+
+    private record IntervalPrediction(String batteryId, double fraction, int actualRul,
+            String method, int predictedRul, double lower, double median, double upper) {
     }
 }
